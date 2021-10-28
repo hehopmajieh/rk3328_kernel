@@ -1,0 +1,13 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "rockchip,rk3328";
+
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			model = "Radxa ROCK Pi E V11";
+		};
+	};
+};

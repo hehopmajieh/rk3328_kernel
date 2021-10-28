@@ -1,0 +1,134 @@
+## Introduction
+
+This document describes overlays provided in the kernel packages.
+For generic device tree overlays documentation please see
+https://wiki.radxa.com/Device-tree-overlays
+
+## Platform and Chips:
+
+rockchip (Rockchip)
+- rk3328
+
+#### usage
+
+Kernel provided DT overlay files are in
+  /boot/dtbs/$(uname -r)/rockchip/overlay/
+
+/boot/uEnv.txt contents:
+
+overlays=rk3328-console-on-uart2 rk3328-i2c1 rk3328-w1-gpio rk3328-spi-spidev rk3328-uart1
+param_spidev_spi_bus=0
+param_spidev_max_freq=10000000
+param_w1_pin=GPIO2_D2
+
+Add names of overlays you want to activate to overlays= line in /boot/uEnv.txt, separated with spaces.
+Add required parameters with their values to /boot/uEnv.txt, one per line.
+Add optional parameters with their values to /boot/uEnv.txt if you want to change the default value, one per line.
+
+#### rk3328 Overlay details:
+
+- rk3328-i2c1
+- rk3328-spi-spidev
+- rk3328-uart1, rk3328-uart2
+- rk3328-console-on-uart1, rk3328-console-on-uart2
+- rk3328-w1-gpio
+
+#### rk3328-i2c1
+
+Activates I2C bus 2
+
+I2C2 pins (SCL, SDA): GPIO2_A1, GPIO2_A0
+
+Usage: add one line in /boot/uEnv.txt
+overlays=rk3328-i2c1
+
+#### rk3328-spi-spidev
+
+Activates SPIdev device node (/dev/spidevX.Y) for userspace SPI access,
+where X is the bus number and Y is the CS number
+
+SPI 0 pins (MOSI, MISO, SCK, CS): GPIO3_A1, GPIO3_A2, GPIO3_A0, GPIO3_B0
+
+Parameters:
+
+param_spidev_spi_bus (int)
+    SPI bus to activate SPIdev support on
+    Required
+    Supported values: 0
+
+param_spidev_spi_cs (int)
+    SPI chip select number
+    Optional
+    Default: 0
+    Supported values: 0
+
+param_spidev_max_freq (int)
+    Maximum SPIdev frequency
+    Optional
+    Default: 10000000
+    Range: 3000 - 100000000
+
+#### rk3328-uart1
+
+Activates serial port 1 (/dev/ttyS1)
+
+UART1 pins (RXD, TXD): GPIO3_A6, GPIO3_A4
+
+Notice: rk3328-uart1 and rk3328-console-on-uart1 cannnot be added together
+in /boot/uEnv.txt.
+
+#### rk3328-uart2
+
+Activates serial port 2 (/dev/ttyS2)
+
+UART2 pins (RXD, TXD): GPIO2_A1, GPIO2_A0
+
+Notice: rk3328-uart2 and rk3328-console-on-uart2 cannnot be added together
+in /boot/uEnv.txt.
+
+#### rk3328-console-on-uart1
+
+Activates debug console on UART1
+
+console pins (RXD, TXD): GPIO3_A6, GPIO3_A4
+
+Notice: rk3328-console-on-uart1 and rk3328-uart1 cannnot be added together
+in /boot/uEnv.txt.
+
+#### rk3328-console-on-uart2
+
+Activates debug console on UART2
+
+console pins (RXD, TXD): GPIO2_A1, GPIO2_A0
+
+Notice: rk3328-console-on-uart2 and rk3328-uart2 cannnot be added together
+in /boot/uEnv.txt.
+
+#### rk3328-w1-gpio
+
+Activates 1-Wire GPIO master
+
+Requires an external pull-up resistor on the data pin
+
+Parameters:
+
+param_w1_pin (pin)
+	Data pin for 1-Wire master
+	Optional
+	Default: GPIO2_D2
+
+#### rk3328-usb-otg
+
+Activates USB OTG mode
+
+usb pin (DM,DP): USB20DM, USB20DP
+
+Notice: Turning on USB OTG mode will turn off USB host mode
+
+#### rk3328-rock-pi-e-model-v11
+
+Mark the hardware as model V11
+
+View the path of the model name: /proc/device-tree/model
+
+Notice: The model name will be changed to "Radxa ROCK Pi E V11".
